@@ -1,0 +1,156 @@
+/* ```css */
+
+:root { /* The :root selector represents the <html> element in the HTML page. */
+	
+	/*Add some constants to the page root at the top of your CSS file.*/
+	/* --green: #00FF00; */
+	--green: rgb(121, 199, 181);
+	--white: #ffffff;
+	--black: #000000;
+	--dark: rgb(37, 37, 38);
+    }
+
+    * {
+	    /*specify the variables defined in the light and dark theme selectors.*/
+	color: var(--fontColor); /*set the default color property for all page elements. */
+	background-color: var(--bg);
+	font-family: monospace;
+    }
+    
+    body {
+	  background: var(--bg);
+    }
+
+ul {
+	font-family: helvetica;
+}
+
+input {
+	/* color: red; */
+	background-color: var(--bg);
+	/* border-color: var(--fontColor); */
+	/* border-r */
+	/* border-bottom-left-radius: 10%; */
+	/* border- */
+	/* border: none; */
+	padding: 12px 15px;
+
+	margin: 8px 0;
+	width: 100%;
+}
+
+.ph {
+	color: red;
+}
+
+#msg {
+	/*The HTML element that has its id attribute set to "msg" will inherit the styles that are defined within this selector.*/
+	color: green;
+}
+
+.light-theme {
+	/* color: #000000;
+	background: white; */
+	/* define some new variables, bg and fontColor, to specify the background color and font color. */
+	--bg: var(--white);
+	/* Use the var keyword to specify variables to use as the property values. */
+	--fontColor: var(--dark);
+	--btnBg: var(--green);
+	--btnFontColor: var(--white);
+	--emailBg: var(--white);
+	--emailFontColor: var(--dark)
+    }
+
+.dark-theme {
+	/* color: white;
+	background: black; */
+
+	--bg: var(--dark);
+	--fontColor: var(--white);
+	--btnBg: var(--green);
+	--btnFontColor: var(--dark);
+	--emailBg: var(--dark);
+	--emailFontColor: var(--white)
+}
+
+.btn {
+	position: absolute;
+	top: 20px;
+	left: 250px;
+	height: 50px;
+	width: 50px;
+	border-radius: 50%;
+	border: none;
+	color: var(--btnFontColor);
+	background-color: var(--btnBg);
+    }
+/*121 199 181*/
+.btn:focus {
+	outline-style: none; 
+}
+
+
+/* ``` */
+
+
+
+
+
+
+
+/* The Modal (background) */
+.modal {
+	display: none; /* Hidden by default */
+	position: fixed; /* Stay in place */
+	z-index: 1; /* Sit on top */
+	left: 0;
+	top: 0;
+	width: 100%; /* Full width */
+	height: 100%; /* Full height */
+	overflow: auto; /* Enable scroll if needed */
+	background-color: rgb(0,0,0); /* Fallback color */
+	background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+	padding-top: 60px;
+    }
+    
+    /* Modal Content/Box */
+    .modal-content {
+	background-color: #fefefe;
+	margin: 5px auto; /* 15% from the top and centered */
+	border: 1px solid #888;
+	width: 80%; /* Could be more or less, depending on screen size */
+    }
+    
+    /* The Close Button */
+    .close {
+	/* Position it in the top right corner outside of the modal */
+	position: absolute;
+	right: 25px;
+	top: 0; 
+	color: #000;
+	font-size: 35px;
+	font-weight: bold;
+    }
+    
+    /* Close button on hover */
+    .close:hover,
+    .close:focus {
+	color: red;
+	cursor: pointer;
+    }
+    
+    /* Add Zoom Animation */
+    .animate {
+	-webkit-animation: animatezoom 0.6s;
+	animation: animatezoom 0.6s
+    }
+    
+    @-webkit-keyframes animatezoom {
+	from {-webkit-transform: scale(0)} 
+	to {-webkit-transform: scale(1)}
+    }
+    
+    @keyframes animatezoom {
+	from {transform: scale(0)} 
+	to {transform: scale(1)}
+    }
