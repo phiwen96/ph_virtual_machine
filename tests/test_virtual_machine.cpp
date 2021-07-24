@@ -7,34 +7,11 @@
 #define EAT(...)
 #define fwd(x) std::forward <decltype (x)> (x)
 
-//namespace std{
-//auto begin (auto&& c) {
-//    return c;
-//}
-//}
-//auto begin (auto&& c) {
-//    return c;
-//}
+
 
 
 namespace ph::virtual_machine
 {
-    using std::cout, std::endl;
-    using namespace ph::concepts;
-    
-    enum struct variable_type
-    {
-        STRING,
-        NUMBER,
-        STRUCT
-    };
-    
-    struct variable
-    {
-        char name [100];
-//        std::variant <std::string, >
-    };
-    
     inline constexpr bool identifier (auto c) noexcept {
         return c >= 'a' and c <= 'z';
     }
@@ -67,6 +44,15 @@ namespace ph::virtual_machine
         
         return false;
     }
+    
+    using std::cout, std::endl;
+    using namespace ph::concepts;
+    
+    
+    
+    
+    
+    
     
     
     

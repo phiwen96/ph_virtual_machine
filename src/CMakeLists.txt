@@ -1,7 +1,23 @@
+set (include_dir "${CMAKE_CURRENT_LIST_DIR}/../include/ph_virtual_machine")
+set (src_dir "${CMAKE_CURRENT_LIST_DIR}")
+
+ph_create_modules (
+
+	MODULES 
+		"virtual_machine"
+		"common"
+		"value"
 
 
-file(GLOB_RECURSE HEADER_LIST "${PROJECT_SOURCE_DIR}/include/*.hpp")
-file(GLOB SOURCE_LIST ${PROJECT_SOURCE_DIR}/src/*.cpp)
+	INCLUDE
+		"${include_dir}"
+
+	SRC 
+		"${src_dir}"
+)
+
+file(GLOB_RECURSE HEADER_LIST "${include_dir}/*.hpp")
+file(GLOB SOURCE_LIST "${src_dir}/*.cpp")
 
 add_library (ph_virtual_machine
 	${SOURCE_LIST}  ${HEADER_LIST} 
