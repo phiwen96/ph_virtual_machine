@@ -7,6 +7,7 @@ ph_create_modules (
 		"virtual_machine"
 		"common"
 		"value"
+		"opcode"
 
 
 	INCLUDE
