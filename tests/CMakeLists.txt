@@ -15,6 +15,8 @@ FetchContent_MakeAvailable(Catch2)
 file(GLOB_RECURSE HEADER_LIST "include/*.hpp")
 file(GLOB SOURCE_LIST *.cpp)
 add_executable (test_${PROJECT_NAME} ${SOURCE_LIST} ${HEADER_LIST})
+target_compile_definitions (test_${PROJECT_NAME} PRIVATE "$<$<CONFIG:DEBUG>:DEBUG> $<$<CONFIG:RELEASE>:RELEASE>")
+
 target_link_libraries (test_${PROJECT_NAME} PRIVATE ${PROJECT_NAME} Catch2::Catch2)
 target_include_directories (test_${PROJECT_NAME} PRIVATE include)
 ph_precompile (TARGET test_${PROJECT_NAME} PRIVATE PCH ${std_pch})

@@ -353,7 +353,14 @@ TOKEN_TYPES
                         {
                             auto index = top (code);
                             auto& nr = constants [index].as.number;
-
+#ifdef DEBUG
+                            cout << "debug!!!" << endl;
+#endif
+                            
+#ifdef RELEASE
+                            cout<<"release!!"<<endl;
+#endif
+                            
                             cout << "changed from " << nr;
                             nr *= 10;
                             nr += double (c - '0');

@@ -24,6 +24,9 @@ add_library (ph_virtual_machine
 	${SOURCE_LIST}  ${HEADER_LIST} 
 )
 
+target_compile_definitions (${PROJECT_NAME} PRIVATE "$<$<CONFIG:DEBUG>:DEBUG> $<$<CONFIG:RELEASE>:RELEASE>")
+
+
 # target_sources (ph_network PRIVATE in/platform.hpp)
 set (self ${PROJECT_NAME})
 
