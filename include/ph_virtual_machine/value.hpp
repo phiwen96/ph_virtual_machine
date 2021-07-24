@@ -3,6 +3,8 @@
 
 using namespace ph::concepts;
 
+#define fwd(x) std::forward <decltype (x)> (x)
+
 namespace ph::virtual_machine
 {
 
@@ -44,6 +46,8 @@ namespace ph::virtual_machine
                 }
             }
         }
+        
+      
     };
     
     constexpr auto make_value (Bool auto b) noexcept -> value
@@ -56,9 +60,9 @@ namespace ph::virtual_machine
         return {value::VAL_CHAR, .as.chaar = n};
     }
     
-    constexpr auto make_value (Number auto n) noexcept -> value
+    constexpr auto make_number (Number auto&& n) noexcept -> value
     {
-        return {value::VAL_NUMBER, .as.number = n};
+        return {value::VAL_NUMBER, .as.number = static_cast<double>(n)};
     }
     
     

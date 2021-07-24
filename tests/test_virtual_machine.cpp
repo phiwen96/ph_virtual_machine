@@ -253,12 +253,7 @@ TOKEN_TYPES
     
     TEST_CASE ("")
     {
-        using byte = uint8_t;
-        
-        
-        
-//        return;
-        auto lex = [] (String auto && text) -> auto
+        auto parse = [] (String auto && text) -> auto
         {
             auto code = std::vector <uint_fast8_t> {};
             auto constants = std::vector <value> {};
@@ -269,17 +264,21 @@ TOKEN_TYPES
                 NUMBER,
                 WHITESPACE,
                 IDENTIFIER,
-                ADD,
-                SUB,
-                MULT,
-                DIV,
-                CONSTANT
+//                ADD,
+//                SUB,
+//                MULT,
+//                DIV,
+                CONSTANT,
+                OPERATION
             };
             
             Integer  auto e = 10;
             Floating auto number = double {0};
             
-            auto current = BEGIN;
+            auto current = state::BEGIN;
+            
+#define TRANSITION(x) current = state::x;
+            
             
             // loop through source string
 //            cout << whitespace('+') << endl;
@@ -304,10 +303,11 @@ TOKEN_TYPES
                             cout << "begin::digit(" <<  c << ")" << endl;
     //                        cout << "number" << endl;
                             // change current state
-                            current = state::NUMBER;
+                            TRANSITION (NUMBER);
                             
-                            push (code, opcode::OP_CONSTANT, constants.size ());
-                            push (constants, make_value (static_cast <double> (c - '0')));
+                            push (code, opcode::OP_CONSTANT);
+                            push (code, constants.size ());
+                            push (constants, make_number (c - '0'));
                             
                         } else if (identifier (c))
                         {
@@ -351,47 +351,75 @@ TOKEN_TYPES
                     {
                         if (digit (c))
                         {
+                            auto index = top (code);
+                            auto& nr = constants [index].as.number;
+
+                            cout << "changed from " << nr;
+                            nr *= 10;
+                            nr += double (c - '0');
+//                            cout << nr << endl;
+                            cout << " to " << nr;
+                            
                             cout << "number::digit(" <<  c << ")" << endl;
 
-                            current = state::NUMBER;
                             
 //                            push (code, opcode::OP_CONSTANT, constants.size ());
 //                            push (constants, c - '0');
                             
-                        } else if (identifier (c))
+                        } else
                         {
-                            cout << "number::identifier(" <<  c << ")" << endl;
-
-//                            cout << c << endl;
-//                            push (code, opcode::OP_IDENTIFIER, constants.size());
-//                            push (constants, c);
+                            auto index = pop (code);
+                            auto instr = pop (code);
+                            auto & number = constants [index].as.number;
+//                            cout << number << endl;
+//                            auto nr = constants []
                             
-                        } else if (operation (c))
-                        {
-                            cout << "number::operation(" <<  c << ")" << endl;
-
-                            switch (c)
+                            if (identifier (c))
                             {
-                                case '+':
-                                    push (code, opcode::OP_ADD);
-                                    break;
-                                    
-                                case '-':
-                                    push (code, opcode::OP_SUB);
-                                    break;
-                                    
-                                case '*':
-                                    push (code, opcode::OP_MULT);
-                                    break;
-                                    
-                                case '/':
-                                    push (code, opcode::OP_DIV);
-                                    break;
-    
-                                default:
-                                    break;
+                                cout << "number::identifier(" <<  c << ")" << endl;
+
+    //                            cout << c << endl;
+    //                            push (code, opcode::OP_IDENTIFIER, constants.size());
+    //                            push (constants, c);
+                                
+                            } else if (operation (c))
+                            {
+                                switch (c)
+                                {
+                                    case '+':
+                                        cout << "number::operation(" <<  c << ")" << endl;
+
+//                                        push (code, opcode::OP_ADD, OP_CONSTANT, index);
+                                        break;
+                                        
+                                    case '-':
+                                        cout << "number::operation(" <<  c << ")" << endl;
+
+//                                        push (code, opcode::OP_SUB, OP_CONSTANT, index);
+                                        break;
+                                        
+                                    case '*':
+                                        cout << "number::operation(" <<  c << ")" << endl;
+
+//                                        push (code, opcode::OP_MULT, OP_CONSTANT, index);
+                                        break;
+                                        
+                                    case '/':
+                                        cout << "number::operation(" <<  c << ")" << endl;
+
+//                                        push (code, opcode::OP_DIV, OP_CONSTANT, index);
+                                        break;
+        
+                                    default:
+                                        throw std::runtime_error ("whaaat");
+                                        break;
+                                }
+                                
+                                TRANSITION (OPERATION);
                             }
                         }
+                        
+                        
                         break;
                     }
                         
@@ -416,60 +444,44 @@ TOKEN_TYPES
                                 
                             } else if (c == '+') // push instruction and change state
                             {
+                                cout << "constant::period(" <<  c << ")" << endl;
+
                                 push (code, opcode::OP_ADD);
-                                current = state::ADD;
+                                TRANSITION (OPERATION);
                                 
-                                current = state::ADD;
                                 e = 10;
                                 continue;
                                 
                             } else if (c == '-') // push instruction and change state
                             {
+                                cout << "constant::period(" <<  c << ")" << endl;
+
                                 push (code, opcode::OP_ADD);
-                                current = state::ADD;
-                                
+                                TRANSITION (OPERATION);
+
                                 e = 10;
                                 continue;
                                 
                             } else if (c == '*') // push instruction and change state
                             {
+                                cout << "constant::period(" <<  c << ")" << endl;
+
                                 push (code, opcode::OP_ADD);
-                                current = state::ADD;
-                                
+                                TRANSITION (OPERATION);
+
                                 e = 10;
                                 continue;
                                 
                             } else if (c == '/') // push instruction and change state
                             {
+                                cout << "constant::period(" <<  c << ")" << endl;
+
                                 push (code, opcode::OP_ADD);
-                                current = state::ADD;
-                                
-                                current = state::ADD;
+                                TRANSITION (OPERATION);
+
                                 e = 10;
                                 continue;
                             }
-                        }
-                        
-                        break;
-                    }
-                        
-                    case state::ADD:
-                    {
-                        cout << "state: ADD" << endl;
-                        
-                        if (digit (c)) // change state and push value and instruction
-                        {
-//                            push (code, opcode::OP_ADD, constants.size());
-//                            push (constants, c - '0');
-                            
-                            current = state::NUMBER;
-                            
-                        } else if (identifier (c)) // change state and push identifier
-                        {
-//                            push (code, opcode::OP_IDENTIFIER, constants.size (), /*length*/1);
-//                            push (constants, c);
-
-//                            current = state::IDENTIFIER;
                         }
                         
                         break;
@@ -496,6 +508,39 @@ TOKEN_TYPES
 //                        break;
                     }
                         
+                    case state::OPERATION:
+                    {
+                        if (digit (c)) // change state and push value and instruction
+                        {
+                            auto index = constants.size();
+                            push (constants, make_number (c - '0'));
+                            push (code, opcode::OP_CONSTANT, index);
+                            cout << "operation::digit(" << c << ")" << endl;
+
+//                            push (code, opcode::OP_ADD, constants.size());
+//                            push (constants, c - '0');
+                            
+                            TRANSITION (NUMBER);
+
+                        } else if (identifier (c)) // change state and push identifier
+                        {
+                            cout << "operation::identifier(" << c << ")" << endl;
+
+//                            push (code, opcode::OP_IDENTIFIER, constants.size (), /*length*/1);
+//                            push (constants, c);
+
+                            TRANSITION (IDENTIFIER);
+
+                        } else if (operation (c))
+                        {
+                            cout << "operation::operation(" << c << ")" << endl;
+                            TRANSITION (OPERATION);
+
+                        }
+                        
+                        break;
+                    }
+                        
                     default:
                     {
                         cout << "state: default" << endl;
@@ -510,17 +555,63 @@ TOKEN_TYPES
     //            cout << i << endl;
             return std::make_tuple (code, constants);
         };
+        
+        
+        cout << "in: " << "41 + 10" << endl;
 
         
-//        cout << endl;
-//        code = lex ("---");
+        cout << "===lexing==============" << endl;
+        auto [code, constants] = parse ("41 + 10");
         
-//        return 0;
+        cout << "===execute==================" << endl;
+        cout << code.size() << endl;
+        auto execute = [](auto& code, auto& constants){
+            for (int i = 0; i < code.size(); ++i)
+            {
+                switch (code [i])
+                {
+                    case opcode::OP_ADD:
+                    {
+                        cout << "OP_ADD" << endl;
+                        break;
+                    }
+                    case opcode::OP_SUB:
+                    {
+                        cout << "OP_SUB" << endl;
+
+                        break;
+                    }
+                    case opcode::OP_MULT:
+                    {
+                        cout << "OP_MULT" << endl;
+
+                        break;
+                    }
+                    case opcode::OP_DIV:
+                    {
+                        cout << "OP_DIV" << endl;
+
+                        break;
+                    }
+                    case opcode::OP_CONSTANT:
+                    {
+                        cout << "OP_CONSTANT" << endl;
+
+                        break;
+                    }
+
+                    default:
+                    {
+                        cout << "unknown" << endl;
+                        break;
+                    }
+                }
+
+
+            }
+        };
         
-        cout << "===lexing==" << endl;
-        cout << "in: " << "41 + 10" << endl;
-        auto [code, constants] = lex ("41 + 10");
-        cout << "===========" << endl;
+        execute (code, constants);
         
 
         
@@ -529,76 +620,87 @@ TOKEN_TYPES
 //        cout << constants.size() << endl;
 //        cout << constants[0] << endl;
         
-//        auto* 
+//        auto*
         
-        for (int i = 0; i < code.size(); ++i)
-        {
-            switch (code [i])
-            {
-                case opcode::OP_CONSTANT:
-                {
+        return;
+     
+//        for (int i = 0; i < code.size(); ++i)
+//        {
+//            switch (code [i])
+//            {
+//                case opcode::OP_CONSTANT:
+//                {
+//                    cout << "OP_CONSTANT" << endl;
+////                    auto rhs = pop (constants).as.number;
+////                    auto lhs = pop (constants).as.number;
+//
+////                    cout << "ADD " << lhs << " " << rhs << endl;
+////                    push (constants, make_value (lhs + rhs));
+//
+////                    return i + 4;
+//                    break;
+//                }
+//                case opcode::OP_ADD:
+//                {
 //                    auto rhs = pop (constants).as.number;
 //                    auto lhs = pop (constants).as.number;
-                    
+//
 //                    cout << "ADD " << lhs << " " << rhs << endl;
-//                    push (constants, make_value (lhs + rhs));
-                    return i + 1;
-//                    return i + 4;
-                }
-                case opcode::OP_ADD:
-                {
-                    auto rhs = pop (constants).as.number;
-                    auto lhs = pop (constants).as.number;
-                    
-                    cout << "ADD " << lhs << " " << rhs << endl;
-//                    push (constants, make_value (lhs + rhs));
-                    return i + 4;
-                }
-                    
-                case opcode::OP_SUB:
-                {
-                    auto rhs = pop (constants).as.number;
-                    auto lhs = pop (constants).as.number;
-                    
-                    cout << "SUB " << lhs << " " << rhs << endl;
-//                    push (constants, make_value (lhs - rhs));
-                    return i + 4;
-                }
-                case opcode::OP_MULT:
-                {
-                    auto rhs = pop (constants).as.number;
-                    auto lhs = pop (constants).as.number;
-                    
-                    cout << "MULT " << lhs << " " << rhs << endl;
-//                    push (constants, make_value (lhs * rhs));
-                    return i + 4;
-                }
-                case opcode::OP_DIV:
-                {
-                    auto rhs = pop (constants).as.number;
-                    auto lhs = pop (constants).as.number;
-                    
-                    cout << "DIV " << lhs << " " << rhs << endl;
-//                    push (constants, make_value (lhs / rhs));
-                    return i + 4;
-                }
-                case opcode::OP_PRINT:
-                {
-                    auto value = pop (constants).as.number;
-                    
-                    cout << "PRINT " << value << endl;
-//                    push (constants, lhs / rhs);
-                    return i + 4;
-                }
-                    
-                    
-                    
-                default:
-                {
-                    return i + 1;
-                }
-            }
-        }
+////                    push (constants, make_value (lhs + rhs));
+//                    i += 4;
+//                    break;
+//                }
+//
+//                case opcode::OP_SUB:
+//                {
+//                    auto rhs = pop (constants).as.number;
+//                    auto lhs = pop (constants).as.number;
+//
+//                    cout << "SUB " << lhs << " " << rhs << endl;
+////                    push (constants, make_value (lhs - rhs));
+//                    i += 4;
+//                    break;
+//                }
+//                case opcode::OP_MULT:
+//                {
+//                    auto rhs = pop (constants).as.number;
+//                    auto lhs = pop (constants).as.number;
+//
+//                    cout << "MULT " << lhs << " " << rhs << endl;
+////                    push (constants, make_value (lhs * rhs));
+//                    i += 4;
+//                    break;
+//                }
+//                case opcode::OP_DIV:
+//                {
+//                    auto rhs = pop (constants).as.number;
+//                    auto lhs = pop (constants).as.number;
+//
+//                    cout << "DIV " << lhs << " " << rhs << endl;
+////                    push (constants, make_value (lhs / rhs));
+//                    i += 4;
+//                    break;
+//                }
+//                case opcode::OP_PRINT:
+//                {
+//                    auto value = pop (constants).as.number;
+//
+//                    cout << "PRINT " << value << endl;
+////                    push (constants, lhs / rhs);
+//                    i += 4;
+//                    break;
+//                }
+//
+//
+//
+//                default:
+//                {
+//                    break;
+//                }
+//            }
+//        }
+        
+        
     }
     
     
