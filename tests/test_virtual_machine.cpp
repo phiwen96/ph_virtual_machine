@@ -1,6 +1,3 @@
-#pragma once
-
-
 #include <ph_concepts/concepts.hpp>
 
 #include <catch2/catch.hpp>
@@ -9,5 +6,9 @@
 
 namespace ph::virtual_machine
 {
+    TEST_CASE ()
+    {
+        std::cout << "hi" << std::endl;
 
+    }
 }
