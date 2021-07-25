@@ -1,7 +1,15 @@
 #pragma once
 
 
-namespace ph::virtual_machine
+namespace ph
 {
+    auto begin (auto&& i)
+    requires requires ()
+    {
+        true;
+    }
+    {
+        
+    }
     
 }

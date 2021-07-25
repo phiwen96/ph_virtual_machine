@@ -9,7 +9,8 @@ namespace ph::virtual_machine
     X (OP_MULT) \
     X (OP_DIV) \
     X (OP_CONSTANT) \
-    X (OP_PRINT)
+    X (OP_PRINT) \
+    X (OP_GEN_ERROR)
     
     enum opcode : uint_fast8_t
     {
