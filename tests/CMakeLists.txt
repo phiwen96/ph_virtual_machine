@@ -3,14 +3,17 @@ set (${self} test_${PROJECT_NAME})
 # ph_fetch (catch2)
 # find_package(Catch2 REQUIRED)
 
-include(FetchContent)
+if (NOT TARGET Catch2)
+	include(FetchContent)
 
-FetchContent_Declare(
-  Catch2
-  GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-  GIT_TAG        v2.13.1)
+	FetchContent_Declare(
+	Catch2
+	GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+	GIT_TAG        v2.13.1)
 
-FetchContent_MakeAvailable(Catch2)
+	FetchContent_MakeAvailable(Catch2)
+endif ()
+
 
 file(GLOB_RECURSE HEADER_LIST "include/*.hpp")
 file(GLOB SOURCE_LIST *.cpp)

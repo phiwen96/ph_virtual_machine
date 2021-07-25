@@ -8,13 +8,14 @@ if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 	find_package (Boost 1.74 REQUIRED)
 	# find_package(OpenSSL REQUIRED)
 endif()
-if (NOT TARGET ph::cmake)
+if (NOT TARGET ph_cmake)
+include(FetchContent)
 	FetchContent_Declare(
-  		Catch2
+  		ph_cmake
   		GIT_REPOSITORY https://github.com/phiwen96/ph_cmake.git
   		GIT_TAG        v0.0.0)
 
-	FetchContent_MakeAvailable(Catch2)
+	FetchContent_MakeAvailable(ph_cmake)
 endif ()
 if (NOT TARGET ph::type)
 	add_subdirectory (dependencies/ph_type)
