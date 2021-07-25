@@ -43,7 +43,7 @@ target_compile_features (${self} PUBLIC cxx_std_20)
 # ph_precompile (TARGET ph_concepts PRIVATE PCH ${std_pch} ${boost_pch})
 
 add_library (ph::virtual_machine ALIAS ph_virtual_machine)
-target_link_libraries (ph_virtual_machine PUBLIC ph::concepts ph::data_structures ${Boost_LIBRARIES})
+target_link_libraries (ph_virtual_machine PUBLIC ph::concepts ph::data_structures ph::type ${Boost_LIBRARIES})
 target_include_directories (ph_virtual_machine PUBLIC ${PROJECT_SOURCE_DIR}/include)
 target_include_directories (ph_virtual_machine PUBLIC ${Boost_INCLUDE_DIRS})
 #  OpenSSL::SSL
