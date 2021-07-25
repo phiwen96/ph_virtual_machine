@@ -32,11 +32,11 @@ namespace A{
 
 TEST_CASE("")
 {
-    A::print2();
-    A::print();
-    A::B::KUK::print();
-    A::B::current::KUK::print();
-    A::B::old::KUK::print();
+//    A::print2();
+//    A::print();
+//    A::B::KUK::print();
+//    A::B::current::KUK::print();
+//    A::B::old::KUK::print();
 
 }
 
@@ -79,7 +79,7 @@ namespace ph::virtual_machine
     
     TEST_CASE ("lol")
     {
-//        auto
+        
     }
     
     
@@ -360,6 +360,7 @@ TOKEN_TYPES
     
     TEST_CASE ("")
     {
+        return;
         auto parse = [] (String auto && text) -> auto
         {
             auto code = std::vector <uint_fast8_t> {};
@@ -822,6 +823,7 @@ TOKEN_TYPES
     
     TEST_CASE ("main")
     {
+        return;
 //        using constant = double;
 //        using byte = uint8_t;
 //
@@ -862,7 +864,7 @@ TOKEN_TYPES
 
     TEST_CASE ("disassemble")
     {
-//        return;
+        return;
 //        Range auto instructions = std::vector <opcode> {};
 //        Range auto constants = std::vector <value> {};
 //
