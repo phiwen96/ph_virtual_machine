@@ -13,7 +13,7 @@ include(FetchContent)
 	FetchContent_Declare(
   		ph_cmake
   		GIT_REPOSITORY https://github.com/phiwen96/ph_cmake.git
-  		GIT_TAG        v0.0.0)
+  		GIT_TAG        0.0.0)
 
 	FetchContent_MakeAvailable(ph_cmake)
 endif ()
